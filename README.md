@@ -5,7 +5,7 @@ Bot URL: http://t.me/LambdaTrialBot
 
 Steps to set up serverless and push code to AWS lambda run the bot:
 
-# Install the Serverless Framework
+# Install the Serverless Framework in the working directory of the telegram bot
 $ npm install serverless -g
 
 # Install the necessary plugins
