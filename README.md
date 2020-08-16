@@ -23,7 +23,7 @@ On the vocareum webpage, click on Account Details, then show AWS CLI
 Copy the text shown
 
 # Update credentials file
-For Windows: By default, credentials file will be located at C:\Users\<your_user>\.aws\credentials
+For Windows: By default, credentials file will be located at C:\Users\\<your_user>\\.aws\credentials
 Open credentials file, paste the text copied previously, then save the file
 
 # Deploy it!
