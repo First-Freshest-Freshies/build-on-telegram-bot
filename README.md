@@ -13,6 +13,7 @@ $ npm install
 
 # Put the bot token received into a file called serverless.yml
 Open serverless.yml, then at TELEGRAM_TOKEN: <your_token>, replace <your_token> with your bot's token
+(Can use the bot I created, link is above and token is already included in serverless.yml)
 
 # Install AWS CLI
 https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
