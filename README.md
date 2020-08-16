@@ -20,7 +20,7 @@ https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
 
 # Obtain AWS CLI session keys and tokens
 Log into AWS Educate account, clivk on AWS Account tab, then click on AWS Educate Starter Account
-On the vocareum webpage, click on Account Details, then show AWS CLI
+$ On the vocareum webpage, click on Account Details, then show AWS CLI
 Copy the text shown
 
 # Update credentials file
