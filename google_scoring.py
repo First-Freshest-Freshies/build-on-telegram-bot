@@ -15,7 +15,7 @@ def get_url_score(url):
     score_70 = ["fortune.com", "time.com", "forbes.com", "businessinsider.com", "vanityfair.com"]
     score_55 = ["msnbc.com", "edition.cnn.com", "washingtontimes.com", "huffingtonpost.co.uk"]
     score_40 = ["foxnews.com", "nypost.com", "dailymail.co.uk"]
-    scoring_criteria = {1: score_100, 0.85: score_85, 0.70: score_70, 0.55: score_55, 0.40: score_45}
+    scoring_criteria = {1: score_100, 0.85: score_85, 0.70: score_70, 0.55: score_55, 0.40: score_40}
 
     for score in scoring_criteria:
         sites = scoring_criteria[score]
