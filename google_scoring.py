@@ -35,10 +35,10 @@ def get_date_score(date_string):
     today = datetime.datetime.today()
 
     if date_string[-9:] == "hours ago" or date_string[-7:] == "day ago":
-        article = datetime.datetime.today() - timedelta(days=1)
+        article = datetime.datetime.today() - datetime.timedelta(days=1)
     elif date_string[-8:] == "days ago":
         days_ago = int(date_string[0])
-        article = datetime.datetime.today() - timedelta(days=days_ago)
+        article = datetime.datetime.today() - datetime.timedelta(days=days_ago)
     else:
         article = datetime.datetime.strptime(date_string, "%b %d, %Y")
 
