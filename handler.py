@@ -1,94 +1,106 @@
-import json
-import telegram
+# NOTE: ignore the comments related to imports and PyTorch
+
+# There's an import error here. unzip_requirements does not import
+# Is it need to download serverless-python-dependencies?
+'''
+try:
+    import unzip_requirements
+except ImportError:
+    pass
+'''
 import os
-import logging
-import boto3
+import sys
+import json
+
+# import torch  # cant import unzip_requirements, thus this also doesn't work
+#import numpy as np
+#from transformers import *
 
 
-# Logging is cool!
-logger = logging.getLogger()
-if logger.handlers:
-    for handler in logger.handlers:
-        logger.removeHandler(handler)
-logging.basicConfig(level=logging.INFO)
+# Including ./vendored into system path (for importing own dependencies)
+here = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(here, "./vendored"))
 
-OK_RESPONSE = {
-    'statusCode': 200,
-    'headers': {'Content-Type': 'application/json'},
-    'body': json.dumps('ok')
-}
-ERROR_RESPONSE = {
-    'statusCode': 400,
-    'body': json.dumps('Oops, something went wrong!')
-}
+# Import can only happen after adding ./vendored to system path
+import requests
+from transformers import *  # attempting to package this tgt with vendored folder
+import numpy as np          # note that numpy shld be compiled on Linux, not MacOS
 
+TOKEN = os.environ['TELEGRAM_TOKEN']
+BASE_URL = "https://api.telegram.org/bot{}".format(TOKEN)
 
-def configure_telegram():
+# NOTE: run function is essentially a wrapper for the receive_message, handle_message and send_message functions
+def run(event, context):
+    """ Receive a message, handle it, and send a response """
+    try:
+        data = json.loads(event["body"])            # Converts incoming json to dictionary
+        message, chat_id = receive_message(data)    # Extract message and chat_id from dictionary
+        response = handle_message(message)          # Process message and format a response
+        send_message(response, chat_id)             # Post json back to Telegram Server to send to user via bot
+    except Exception as e:
+        print(e)
+
+    return {"statusCode": 200}                      # to prevent infinite triggering...
+
+def receive_message(data):
+    """ Extract message text and chat_id from 'json dictionary' data """
+    try:
+        message = str(data["message"]["text"])
+        chat_id = data["message"]["chat"]["id"]
+        return message, chat_id
+    except Exception as e:
+        print(e)
+        return (None, None)
+
+def handle_message(message):
     """
-    Configures the bot with a Telegram Token.
-
-    Returns a bot instance.
-    """
-
-    TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
-    if not TELEGRAM_TOKEN:
-        logger.error('The TELEGRAM_TOKEN must be set')
-        raise NotImplementedError
-
-    return telegram.Bot(TELEGRAM_TOKEN)
-
-
-def webhook(event, context):
-    """
-    Runs the Telegram webhook.
-    """
-
-
-    bot = configure_telegram()
-    logger.info('Event: {}'.format(event))
-
-    if event.get('httpMethod') == 'POST' and event.get('body'):
-        logger.info('Message received')
-        update = telegram.Update.de_json(json.loads(event.get('body')), bot)
-        chat_id = update.message.chat.id
-
-        if update.message.text == '/start':
-            text = """Welcome to @CheckFakeNewsBot! Ever wondered if an article that a friend or relative has sent you can be trusted? Just copy and paste it into here and I will tell you what I think of it!\n\nTo find out more about the guidelines of this bot, type /help"""
-
-        elif update.message.text == '/help':
-            text = """Judgement criteria:\n1. Literacy - Measured via a spell checker and a reading level estimator. The lower the score, the more spelling mistakes there are/easier it is to read.\n\n2. Sentiment - Measured via AWS Comprehend, an AI that uses machine learning and natural language processing. The lower the score, the more extreme positive/negative sentiments are present\n\n3. Google Search - Measured via an AI by comparing your text with its top 10 google search results. The higher the score, the more reliable the text is."""
-
-        else:
-            input = update.message.text
-            # Backend score calculation here
-            # Placeholder values for scores
-            literacy = 68.6
-            sentiment = 36.0
-            google = 72.0
-            text = """Here are your results!\n\nLiteracy score = """ + str(literacy) + """%\nSentiment score = """ + str(sentiment) + """%\nGoogle score = """ + str(google) + """%\n\nThis piece of text does not look professionally written and seems to purposefully trigger strong emotion. However, it appears to be sufficiently supported by credible sources. We recommend that you read this article with a pinch of salt and do further research to fully understand all sides of this story.\n\nHere are some credible links that may be relevant:\n<INSERT URL HERE>\n<INSERT URL HERE>\n\nHere are some useful tips to help you to better judge information in future: https://www.gov.sg/article/singapores-fight-against-fake-news-what-you-can-do"""
-
-        bot.sendMessage(chat_id=chat_id, text=text)
-        logger.info('Message sent')
-
-        return OK_RESPONSE
-
-    return ERROR_RESPONSE
-
-
-def set_webhook(event, context):
-    """
-    Sets the Telegram bot webhook.
+    Process a message from Telegram
     """
 
-    logger.info('Event: {}'.format(event))
-    bot = configure_telegram()
-    url = 'https://{}/{}/'.format(
-        event.get('headers').get('Host'),
-        event.get('requestContext').get('stage'),
-    )
-    webhook = bot.set_webhook(url)
+    # Add in Command Handlers
+    if message == '/start':
+        response = "Welcome to FactCheck. See /help for a list of commands."
+    elif message == '/help':
+        response = "Send me 2 sentences to compare semantic textual similarity"
+    else:
+        response = "This is not a *command*."
 
-    if webhook:
-        return OK_RESPONSE
+    # NOTE: Everything below here is supposed to be ran after checking for proper user input (inside the if else conditionals above)
 
-    return ERROR_RESPONSE
+    # TODO: Literacy and Sentiment Analysis. Returns 2 scores in range(0, 2) RYANNNNN
+    literacy_score = literacy_function(raw_data)
+
+    # TODO: Preprocess the user input. Returns processed_user_input 
+    processed_data = process_data_function(raw_data)
+
+    # TODO: Implement Web Scraper and call function here on processed_user_input. Returns dictionary of lists.
+    webscraper_results = webscraper_function(processed_data)
+
+    # TODO: Feed array in for loop to AI Sagemaker. Returns array of scores in range(0, 2)
+    relevance_score_array = []
+    for i in range(len(dict['TITLE'])):
+        sentence = ' '.join([dict['TITLE'], dict['SYNOPSIS']])
+        relevance_score = ai_function(sentence)
+        relevance_score_array.append(relevance_score)
+
+    # TODO: Compute Source and Date Scores
+    source_score = source_function(dict['URL']) # source_function will iterate through the array of URLs
+    data_score = date_function(dict['DATE'])    # date_function will iterate through the array of dates
+
+    # TODO: dynamo call 1 # stores all the scores
+    # TODO: dynamo call 2 # store all the AI relevant stuff
+
+    return response
+
+def send_message(message, chat_id):
+    """
+    Send a message to the Telegram chat defined by chat_id in Markdown parse_mode
+    """
+    data = {"text": message.encode("utf8"), "chat_id": chat_id, "parse_mode": "Markdown"}
+    url = BASE_URL + "/sendMessage"
+
+    try:
+        requests.post(url, data)
+    except Exception as e:
+        print(e)
+
