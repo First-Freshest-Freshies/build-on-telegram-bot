@@ -32,18 +32,18 @@ def get_date_score(date_string):
     """
     
     import datetime
-    today = datetime.date.today()
+    today = datetime.datetime.today()
 
     if date_string[-9:] == "hours ago" or date_string[-7:] == "day ago":
-        article = datetime.date.today() - timedelta(days=1)
+        article = datetime.datetime.today() - timedelta(days=1)
     elif date_string[-8:] == "days ago":
         days_ago = int(date_string[0])
-        article = datetime.date.today() - timedelta(days=days_ago)
+        article = datetime.datetime.today() - timedelta(days=days_ago)
     else:
-        article = datetime.strptime(date_string, "%b %-d, %Y")
+        article = datetime.datetime.strptime(date_string, "%b %d, %Y")
 
-    difference = (today - article).days
-    score = 3/(difference+1095) ## 1 year =0.75, 3 years = 0.5
+    difference = (today-article).total_seconds() /60/60/24/365
+    score = 3/(difference+3) ## 1 year =0.75, 3 years = 0.5
 
     return {"date_score": score}
 
