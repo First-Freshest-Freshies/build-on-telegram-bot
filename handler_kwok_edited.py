@@ -154,12 +154,12 @@ def handle_message(message):
         sentence = ' '.join([web_scrape_dic['TITLE'], web_scrape_dic['SYNOPSIS']])
         relevance_score = ai_function(sentence)
         relevance_score_array.append(relevance_score)
-    web_scrape_dic["relevance_score"] = web_scrape_dic #(kwok added this)
+    web_scrape_dic["relevance_score"] = relevance_score_array #(kwok added this)
 
     # Compute Source and Date Scores (kwok done)
     web_scrape_dic = compute_url_date_score(web_scrape_dic) # iterate through url+date, add 2 keys url_score and date_score
 
-    # TODO: Combine Source/Date/Relevance Scores + lit+sent scores into 1 dic (kwok done)
+    # TODO: Combine Source/Date/Relevance Scores = Google Search Score + lit+sent scores into 1 dic (kwok done)
     compiled_dic = compile_scores(lit_sent_dic, web_scrape_dic) # adds "indiv_result_score" and "google"
 
     # TODO: dynamo call 1 # stores all the scores
