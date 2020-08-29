@@ -1,15 +1,38 @@
+def validation(raw_text):
+    """
+    Takes in string of raw user input
+    Returns dictionary of "validity" and "text".
+    Text is response message if invalid, original raw input if valid.
+    """
+
+    # length check
+    if len(raw_text) < 250:
+        text = "Your input is too short! Please input about 1-2 paragraphs for a more accurate result."
+        return {"validity": False, "text": text}
+    if len(raw_text) > 4000:
+        text = "Your input is way... too... long... Bot... breakdown... Just kidding! Just input something shorter please!"
+        return {"validity": False, "text": text}
+
+    # character check
+    # for x in raw_text:
+    #     if ord(x) > 127:
+    #         text = "Non-English characters detected. Please remove all Chinese/Tamil characters or emojis. Thank you!"
+    #         return {"validity": False, "text": text}
+
+    return {"validity": True, "text": raw_text}
+
 def create_reply(scores):
     '''
     Takes in dictionary of scores and URLs.
     Returns a string of response
     '''
 
-    
+
     results = "Here are your results!\n\n" + \
     "Literacy Score = " + str(round(scores["literacy"]*100, 2)) + "%\n" + \
     "Sentiment Score = " + str(round(scores["sentiment"]*100, 2)) + "%\n" + \
     "Google Score = " + str(round(scores["google"]*100, 2)) + "%\n\n"
-    
+
     # putting scores as true=high, false=low
     lit, sent, goog = False, False, False
     if scores["literacy"] > 0.5:
@@ -49,29 +72,3 @@ def create_reply(scores):
     return results + literacy + conjunction1 + \
            sentiment + conjunction2 + google + \
            recc + link_text + url1 + url2
-
-
-
-def validation(raw_text):
-    """
-    Takes in string of raw user input
-    Returns dictionary of "validity" and "text".
-    Text is response message if invalid, original raw input if valid.
-    """
-    
-    # length check
-    if len(raw_text) < 250:
-        text = "Your input is too short! Please input about 1-2 paragraphs for a more accurate result."
-        return {"validity": False, "text": text}
-    if len(raw_text) > 4000:
-        text = "Your input is way... too... long... Bot... breakdown... Just kidding! Just input something shorter please!"
-        return {"validity": False, "text": text}
-    
-    # character check
-    for x in raw_text:
-        if not (" " <= x <= "~"):
-            text = "Non-English characters detected. Please remove all Chinese/Tamil characters or emojis. Thank you!"
-            return {"validity": False, "text": text}
-        
-    return {"validity": True, "text": raw_text}
-

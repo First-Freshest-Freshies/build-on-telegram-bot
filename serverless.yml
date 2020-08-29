@@ -5,7 +5,7 @@ provider:
   runtime: python3.6
   profile:
   environment:
-    TELEGRAM_TOKEN: ${file(./serverless.env.yml):TELEGRAM_TOKEN, '1313954883:AAGZ1Y_42hT3QfAHLx9kPnvhEzg__1zALC8'}
+    TELEGRAM_TOKEN: ${file(./serverless.env.yml):TELEGRAM_TOKEN, '1182719709:AAESeaFK2gck6GapJYru_q4vSvADGT5-iGg'}
 
 functions:
   webhook:
