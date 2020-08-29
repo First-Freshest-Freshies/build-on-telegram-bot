@@ -136,13 +136,13 @@ Finally, after I consider all the factors, I will give you the Google Search Sco
         return start_message
     elif message == "/help":
         return help_message
-    elif message == "/aboutReliabilityBot":
+    elif message == "/aboutreliabilitybot":
         return aboutReliabilityBot_message
-    elif message == "/aboutLiteracy":
+    elif message == "/aboutliteracy":
         return aboutLiteracy_message
-    elif message == "/aboutSentiment":
+    elif message == "/aboutsentiment":
         return aboutSentiment_message
-    elif message == "/aboutGoogleSearch":
+    elif message == "/aboutgooglesearch":
         return aboutGoogleSearch_message
     elif message[0] == "/":
         return invalid_command
