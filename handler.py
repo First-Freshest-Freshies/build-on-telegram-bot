@@ -110,7 +110,7 @@ I have also found some useful tips to help you to better judge the reliability i
     "Literacy Score:\n\
 I will be using a spell checker and a reading level estimator. \
 The spell checker would flag misspelled words and produce a spelling score. \
-The reading level estimator is an AI that estimates the age required to understand the text.\
+The reading level estimator is an AI that estimates the age required to understand the text. \
 I will then combine both results to determine the Literacy Score."
 
     aboutSentiment_message = \
@@ -118,7 +118,7 @@ I will then combine both results to determine the Literacy Score."
 I will ask my friend AWS Comprehend, another AI that uses Machine Learning and Natural Language Processing for sentiment analysis. \
 Comprehend usually organises customer feedback on online shopping sites, but this time, she will tell me the sentiment of your input. \
 A confidence score of Positive, Negative, Neutral, and Mixed will be given. \
- I will then combine the Neutral and Mixed confidence to produce the Sentiment Score. Thanks Comprehend!!"
+I will then combine the Neutral and Mixed confidence to produce the Sentiment Score. Thanks Comprehend!!"
 
     aboutGoogleSearch_message = \
     "Google Search Score:\n\
