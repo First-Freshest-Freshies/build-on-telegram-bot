@@ -1,7 +1,7 @@
 # build-on-telegram-bot
 Telegram bot hosted on AWS Lambda using Serverless framework for Build On ASEAN 2020 Hackathon
 
-Bot URL: http://t.me/LambdaTrialBot
+Bot URL: http://t.me/BuildOnSGBot
 
 Steps to set up serverless and push code to AWS lambda run the bot:
 
