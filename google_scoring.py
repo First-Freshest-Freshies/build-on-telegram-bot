@@ -1,3 +1,11 @@
+import logging
+
+logger = logging.getLogger()
+if logger.handlers:
+    for handler in logger.handlers:
+        logger.removeHandler(handler)
+logging.basicConfig(level=logging.INFO)
+
 def get_url_score(url):
     """
     Takes in a string that is URL.
@@ -51,7 +59,6 @@ def get_date_score(date_string):
             score = 1
 
     return {"date_score": score}
-
 
 
 def compute_url_date_score(lst):
@@ -120,7 +127,7 @@ def compile_score(dic, dic2):
             elif dic["url2"] == text and dic["url1"] != dic["url"][x]:
                 dic["url2"] = dic["url"][x]
 
-        score = 0.5*relevance[x] + 0.25*url[x] + 0.25*date[x]
+        score = 0.5*int(relevance[x]) + 0.25*url[x] + 0.25*date[x]
         result.append(score)
 
     if len(result) == 0:
