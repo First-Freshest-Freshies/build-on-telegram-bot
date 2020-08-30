@@ -121,7 +121,7 @@ def compile_score(dic, dic2):
     dic["url1"] = text
     dic["url2"] = text
     for x in range(len(dic["url_score"])):
-        if dic["url_score"][x] >= 0.85:
+        if dic["url_score"][x] >= 0.85 or dic["date"][x] == "Factchecker":
             if dic["url1"] == text:
                 dic["url1"] = dic["url"][x]
             elif dic["url2"] == text and dic["url1"] != dic["url"][x]:
