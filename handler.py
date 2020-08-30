@@ -6,6 +6,7 @@ import logging
 from main_functions import *
 from literacy_sentiment import *
 from webscraper import *
+from ai import *
 from google_scoring import *
 from dynamo_call import *
 
@@ -163,15 +164,16 @@ Finally, after I consider all the factors, I will give you the Google Search Sco
     # "date" : [List of each search result dates]} (tested)
     webscraper_list = webscraper_function(message)
 
-    # AI function goes here
-    # ai_output_list = ai_function(webscraper_list)
+    # AI. Returns a list of dictionaries with additional key
+    # {"relevance_score": [List of relevance scores]}
+    ai_output_list = ai_function(webscraper_list)
 
     # Placeholder values for AI scores
-    for dic in webscraper_list:
-        dic["relevance_score"] = [0.78, 0.74, 0.72, 0.73, 0.69, 0.66, 0.70, 0.67, 0.65, 0.65]
-    ai_output_list = webscraper_list
+    # for dic in webscraper_list:
+    #     dic["relevance_score"] = [0.78, 0.74, 0.72, 0.73, 0.69, 0.66, 0.70, 0.67, 0.65, 0.65]
+    # ai_output_list = webscraper_list
 
-    # Source and date scores Returns a dictionary of lists
+    # Source and date scores. Returns a dictionary of lists
     google_dic = compute_url_date_score(ai_output_list)
 
     # Final scores
