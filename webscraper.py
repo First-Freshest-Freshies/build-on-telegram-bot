@@ -100,6 +100,8 @@ def webscraper_function(raw_data):
             temp_dict["title"].append(title)
             if len(synopsis) > 0:
                 temp_dict["synopsis"].append(synopsis)
+            else:
+                temp_dict["synopsis"].append(".")
             temp_dict["date"].append(date)
         google_search_list.append(temp_dict)
 
