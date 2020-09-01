@@ -36,7 +36,7 @@ def ai_function(lst):
                 # }
                 # To send by instance, unindent the invokation command so it invokes every dictionary
         response = client.invoke_endpoint(
-            EndpointName='pytorch-inference-2020-08-30-08-57-27-011', 
+            EndpointName='pytorch-inference-2020-09-01-17-37-42-958', 
             Body=json.dumps(input_data))
         response_body = response['Body'].read()
         
@@ -48,9 +48,12 @@ def ai_function(lst):
         relevance_score_string = relevance_score_string.strip('[')
         relevance_score_string = relevance_score_string.strip(']')
         relevance_score = relevance_score_string.split(", ")
-        for i in range(len(relevance_score)):
-            relevance_score[i] = int(relevance_score[i])
-        dic["relevance_score"] = relevance_score
+        try:
+            for i in range(len(relevance_score)):
+                relevance_score[i] = int(relevance_score[i])
+            dic["relevance_score"] = relevance_score
+        except:
+            dic["relevance_score"] = []
 
         logger.info("AI output = " + str(relevance_score))
 
