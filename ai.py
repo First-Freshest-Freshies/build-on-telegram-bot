@@ -48,6 +48,8 @@ def ai_function(lst):
         relevance_score_string = relevance_score_string.strip('[')
         relevance_score_string = relevance_score_string.strip(']')
         relevance_score = relevance_score_string.split(", ")
+        for i in range(len(relevance_score)):
+            relevance_score[i] = int(relevance_score[i])
         dic["relevance_score"] = relevance_score
 
         logger.info("AI output = " + str(relevance_score))
