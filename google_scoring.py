@@ -13,16 +13,19 @@ def get_url_score(url):
     """
 
     ## grading based on https://www.adfontesmedia.com/wp-content/uploads/2018/08/Media-Bias-Chart_4.0_8_28_2018-min-1024x791.jpg
-    score_100 = ["straitstimes.com", "channelnewsasia.com", "businesstimes.com.sg", \
-                 "todayonline.com", "sg.news.yahoo.com", "apnews.com", "reuters.com" \
-                 "bloomberg.com", "c-span.org", "latimes.com", "abcnews.go.com", \
-                 "cbsnews.com", "bbc.com/news", "nytimes.com", "gov.sg", "theaustralian.com", "medium.com", "reportingasean.net", "campaignasia.com", "foodsafetyymagazine.com", "nbcnews.com", "oregonlive.com" \
-                     "whitehouse.gov", "news.wttw.com", "usnews.com", "healthtechmagazine.net", "medicalxpress.com", "journalnow.com", "pressofatlanticcity.com", "norfolkdailynews.com"]
-    score_85 = ["tnp.sg", "asiaone.com", "mothership.sg", "onlinecitizenasia.com", \
-                "independent.sg", "buzzfeednews.com", "wsj.com", "washingtonpost.com", \
-                "theguardian.com", "economist.com", "newyorker.com", "cnn.com"]
-    score_70 = ["fortune.com", "time.com", "forbes.com", "businessinsider.com", "vanityfair.com"]
-    score_55 = ["msnbc.com", "edition.cnn.com", "washingtontimes.com", "huffingtonpost.co.uk"]
+    score_100 = ["straitstimes.com", "channelnewsasia.com", "businesstimes.com.sg", "shinmin.sg", \
+                 "todayonline.com", "zaobao.com.sg", "wanbao.com.sg", "sg.news.yahoo.com", "apnews.com", "reuters.com", \
+                 "bloomberg.com", "c-span.org", "latimes.com", "abcnews.go.com", "pbs.org", \
+                 "cbsnews.com", "bbc.com/news", "nytimes.com", "nbcnews.com", \
+                 "gov.sg", "whitehouse.gov", "wikipedia.com", "who.int", "lexology.com"]
+    score_85 = ["tnp.sg", "asiaone.com", "mothership.sg", "onlinecitizenasia.com", "sbr.com.sg", \
+                "independent.sg", "buzzfeednews.com", "wsj.com", "washingtonpost.com", "msn.com", \
+                "theguardian.com", "economist.com", "newyorker.com", "aseanbriefing.com", "dollarsandsense.com"]
+    score_70 = ["fortune.com", "time.com", "forbes.com", "businessinsider.com", "vanityfair.com", \
+                "cnn.com", "ijr.com", "foreignpolicy.com", "msnbc.com", "norfolkdailynews.com", "pressofatlanticcity.com", \
+                "vulcanpost.com"]
+    score_55 = ["edition.cnn.com", "washingtontimes.com", "huffingtonpost.co.uk", \
+                "singaporestar.com", "singaporenews.net", "weekender.com.sg"]
     score_40 = ["foxnews.com", "nypost.com", "dailymail.co.uk"]
     scoring_criteria = {1: score_100, 0.85: score_85, 0.70: score_70, 0.55: score_55, 0.40: score_40}
 
@@ -82,6 +85,8 @@ def compute_url_date_score(lst):
 
         dic["url_score"] = url_score_list
         dic["date_score"] = date_score_list
+        logger.info("URL Scores = " + str(url_score_list))
+        logger.info("Date Scores = " + str(date_score_list))
 
     new_dic = {"sentence_chunk":[],\
                "url":[],\
@@ -132,16 +137,16 @@ def compile_score(dic, dic2):
         # score = 0.5*int(relevance[x]) + 0.25*url[x] + 0.25*date[x]
         score = 0
         if relevance[x] == 1:
-            score = (0.5*url[x] + 0.5*date[x]) * 1.3
+            score = (0.6*url[x] + 0.4*date[x]) * 1.5
         elif relevance[x] == 0:
-            score = (0.5*url[x] + 0.5*date[x]) * 0.7
+            score = (0.6*url[x] + 0.4*date[x]) * 0.7
         if score > 1:
             score = 1
         result.append(score)
 
     # average_relevance = sum(relevance) / len(relevance)
 
-    threshold = 0.7
+    threshold = 0.6
     average_result = sum(result) / len(result)
     if len(result) == 0:
         google_score = 0.5
