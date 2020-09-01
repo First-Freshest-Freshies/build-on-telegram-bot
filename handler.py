@@ -92,7 +92,7 @@ def handle_message(message, chat_id, current_date_time):
     start_message = \
     "I am the @ReliabilityBot! Ever wondered if an article that a friend or relative has sent you can be trusted? \
 Just copy and paste it into me and I will tell you what I think of it!\n\n\
-To find out more about how I work, type /aboutReliabilityBot"
+To find out more about how I work, type /aboutreliabilitybot"
 
     help_message = \
     "Simply copy and paste a message or article you recieve for me to analyse!\n\n\
@@ -103,9 +103,9 @@ I have also found some useful tips to help you to better judge the reliability i
 
     aboutReliabilityBot_message = \
     "Judgement Criteria:\n\
-1. /aboutLiteracy - This shows how sophisticated the piece of text is. More sophisticated articles are more likely to be reliable!\n\n\
-2. /aboutSentiment - Indication of the text's overall objectivity. Balanced and unbiased articles are be more reliable!\n\n\
-3. /aboutGoogleSearch - This is an estimate of how well supported the text is by online articles. Greater corroboration = higher reliability!"
+1. /aboutliteracy - This shows how sophisticated the piece of text is. More sophisticated articles are more likely to be reliable!\n\n\
+2. /aboutsentiment - Indication of the text's overall objectivity. Balanced and unbiased articles are be more reliable!\n\n\
+3. /aboutgooglesearch - This is an estimate of how well supported the text is by online articles. Greater corroboration = higher reliability!"
 
     aboutLiteracy_message = \
     "Literacy Score:\n\
@@ -130,7 +130,7 @@ In addition, I will determine the reliability and currency of the results based 
 Finally, after I consider all the factors, I will give you the Google Search Score."
 
     invalid_command = \
-"Invalid command. Valid commands are /start /help /aboutReliabilityBot /aboutLiteracy /aboutSentiment /aboutGoogleSearch"
+"Invalid command. Valid commands are /start /help /aboutreliabilitybot /aboutliteracy /aboutsentiment /aboutgooglesearch"
 
     # Command Handlers (tested)
     if message == "/start":
