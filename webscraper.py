@@ -3,9 +3,16 @@ from lxml import etree
 from bs4 import BeautifulSoup
 import re
 import boto3
+import logging
 
 # Testing purposes
 # raw = {"validity": True, "text": "Just now, the US CNBC website reported that several US Growler electronic warplanes were mysteriously attacked when they flew to the South China Sea again. These warplanes were all out of control midway, but these warplanes were out of control for only a few seconds. Then the US military ordered the request. All fighters over the South China Sea withdrew."}
+
+logger = logging.getLogger()
+if logger.handlers:
+    for handler in logger.handlers:
+        logger.removeHandler(handler)
+logging.basicConfig(level=logging.INFO)
 
 stop_words = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"]
 
@@ -55,6 +62,7 @@ def webscraper_function(raw_data):
     for (sentence_chunk, search_query) in processed_data:
         # preprocessed_query = "\"" + search_query + "\""
         url = 'https://encrypted.google.com/search?q={}&tbs=cdr:1,cd_min:1/1/0'.format(search_query)
+        logger.info("URL Searched = " + str(url))
         # print(url + '\n')
         # print('#############################################\n')
 
