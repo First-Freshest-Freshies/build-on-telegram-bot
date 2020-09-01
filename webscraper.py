@@ -61,7 +61,7 @@ def webscraper_function(raw_data):
     google_search_list = []
     for (sentence_chunk, search_query) in processed_data:
         # preprocessed_query = "\"" + search_query + "\""
-        url = 'https://encrypted.google.com/search?q={}&tbs=cdr:1,cd_min:1/1/0'.format(search_query)
+        url = 'https://www.google.com/search?q={}&tbs=cdr:1,cd_min:1/1/0'.format(search_query)
         logger.info("URL Searched = " + str(url))
         # print(url + '\n')
         # print('#############################################\n')
