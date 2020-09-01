@@ -16,10 +16,11 @@ def get_url_score(url):
     score_100 = ["straitstimes.com", "channelnewsasia.com", "businesstimes.com.sg", \
                  "todayonline.com", "sg.news.yahoo.com", "apnews.com", "reuters.com" \
                  "bloomberg.com", "c-span.org", "latimes.com", "abcnews.go.com", \
-                 "cbsnews.com", "bbc.com/news", "nytimes.com"]
+                 "cbsnews.com", "bbc.com/news", "nytimes.com", "gov.sg", "theaustralian.com", "medium.com", "reportingasean.net", "campaignasia.com", "foodsafetyymagazine.com", "nbcnews.com", "oregonlive.com" \
+                     "whitehouse.gov", "news.wttw.com", "usnews.com", "healthtechmagazine.net", "medicalxpress.com", "journalnow.com", "pressofatlanticcity.com", "norfolkdailynews.com"]
     score_85 = ["tnp.sg", "asiaone.com", "mothership.sg", "onlinecitizenasia.com", \
                 "independent.sg", "buzzfeednews.com", "wsj.com", "washingtonpost.com", \
-                "theguardian.com", "economist.com", "newyorker.com"]
+                "theguardian.com", "economist.com", "newyorker.com", "cnn.com"]
     score_70 = ["fortune.com", "time.com", "forbes.com", "businessinsider.com", "vanityfair.com"]
     score_55 = ["msnbc.com", "edition.cnn.com", "washingtontimes.com", "huffingtonpost.co.uk"]
     score_40 = ["foxnews.com", "nypost.com", "dailymail.co.uk"]
@@ -121,19 +122,41 @@ def compile_score(dic, dic2):
     dic["url1"] = text
     dic["url2"] = text
     for x in range(len(dic["url_score"])):
-        if dic["url_score"][x] >= 0.85 or dic["date"][x] == "Factchecker":
+        if dic["url_score"][x] >= 0.85:
+        #  or dic["date"][x] == "Factchecker":
             if dic["url1"] == text:
                 dic["url1"] = dic["url"][x]
             elif dic["url2"] == text and dic["url1"] != dic["url"][x]:
                 dic["url2"] = dic["url"][x]
 
-        score = 0.5*int(relevance[x]) + 0.25*url[x] + 0.25*date[x]
+        # score = 0.5*int(relevance[x]) + 0.25*url[x] + 0.25*date[x]
+        score = 0
+        if relevance[x] == 1:
+            score = (0.5*url[x] + 0.5*date[x]) * 1.3
+        elif relevance[x] == 0:
+            score = (0.5*url[x] + 0.5*date[x]) * 0.7
+        if score > 1:
+            score = 1
         result.append(score)
 
+    # average_relevance = sum(relevance) / len(relevance)
+
+    threshold = 0.7
+    average_result = sum(result) / len(result)
     if len(result) == 0:
         google_score = 0.5
+    elif average_result >= threshold:
+        google_score = ((average_result - threshold) / (1 - threshold) * 0.5) + 0.5
     else:
-        google_score = sum(result) / len(result)
+        google_score = (average_result / threshold) * 0.5
+
+        # if average_relevance <= 0.2:
+        #     google_score = sum(result) / len(result) * 0.2
+        # elif average_relevance >= 0.7:
+        #     google_score = sum(result) / len(result) * 1.1
+        # else:
+        #     google_score = 0.5 * sum(result) / len(result)
+
     dic["indiv_result_score"] = result
     dic["google"] = google_score
     return dic
