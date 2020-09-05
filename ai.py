@@ -1,6 +1,7 @@
 import json
 import boto3
 import logging
+import asyncio
 
 logger = logging.getLogger()
 if logger.handlers:
@@ -8,7 +9,7 @@ if logger.handlers:
         logger.removeHandler(handler)
 logging.basicConfig(level=logging.INFO)
 
-def ai_function(lst): 
+async def ai_function(lst): 
     """
     Takes in a list of dictionaries
     Returns the list of dictionaries with each dictionary containing an additional key "relevance_score",
@@ -44,7 +45,6 @@ def ai_function(lst):
                 # relevance_score.append(int(similarity))
 
         relevance_score_string = response_body.decode('utf-8')
-        logger.info("AI output string = " + relevance_score_string)
         relevance_score_string = relevance_score_string.strip('[')
         relevance_score_string = relevance_score_string.strip(']')
         relevance_score = relevance_score_string.split(", ")
