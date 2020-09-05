@@ -145,15 +145,16 @@ def compile_score(dic, dic2):
         result.append(score)
 
     # average_relevance = sum(relevance) / len(relevance)
-
+    google_score = 0
     threshold = 0.6
-    average_result = sum(result) / len(result)
     if len(result) == 0:
         google_score = 0.5
-    elif average_result >= threshold:
-        google_score = ((average_result - threshold) / (1 - threshold) * 0.5) + 0.5
     else:
-        google_score = (average_result / threshold) * 0.5
+        average_result = sum(result) / len(result)
+        if average_result >= threshold:
+            google_score = ((average_result - threshold) / (1 - threshold) * 0.5) + 0.5
+        else:
+            google_score = (average_result / threshold) * 0.5
 
         # if average_relevance <= 0.2:
         #     google_score = sum(result) / len(result) * 0.2
