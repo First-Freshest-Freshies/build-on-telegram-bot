@@ -1,6 +1,7 @@
 import logging
 import math
 import textstat
+import asyncio
 
 logger = logging.getLogger()
 if logger.handlers:
@@ -176,7 +177,7 @@ def get_sentiment_score(text):
 
 
 
-def get_lit_sent_score(text):
+async def get_lit_sent_score(text):
     """
     Takes in string of text
     Returns a dictionary of "spelling", "reading", "literacy", and "sentiment"
