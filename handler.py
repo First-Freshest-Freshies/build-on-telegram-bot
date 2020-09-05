@@ -2,6 +2,7 @@ import json
 import telegram
 import os
 import logging
+import asyncio
 
 from main_functions import *
 from literacy_sentiment import *
@@ -74,6 +75,8 @@ def webhook(event, context):
         chat_id = update.message.chat.id
         message = update.message.text
         current_date_time = str(update.message.date)
+
+        # NOTE: MIGHT NEED TO ASYNC THIS
         response = handle_message(message, chat_id, current_date_time)          # Process message and format a response
         # response = "ok"                           # Failsafe
         bot.sendMessage(chat_id = chat_id, text = response)
@@ -153,9 +156,6 @@ Finally, after I consider all the factors, I will give you the Google Search Sco
     if not valid["validity"]:
         return valid["text"]
 
-    # Literacy and Sentiment Analysis. Returns dictionary {"spelling", "reading", "literacy", "sentiment"} (tested)
-    lit_sent_dic = get_lit_sent_score(message)
-
     # Webscraper. Returns list of dictionaries, with each dictionary in the format of
     # {"sentence_chunk" : <String containing 2-sentence-chunk>,
     # "url" : [List of URLs],
@@ -166,26 +166,52 @@ Finally, after I consider all the factors, I will give you the Google Search Sco
 
     # AI. Returns a list of dictionaries with additional key
     # {"relevance_score": [List of relevance scores]}
-    ai_output_list = ai_function(webscraper_list)
 
-    # Placeholder values for AI scores
-    # for dic in webscraper_list:
-    #     dic["relevance_score"] = [0.78, 0.74, 0.72, 0.73, 0.69, 0.66, 0.70, 0.67, 0.65, 0.65]
-    # ai_output_list = webscraper_list
+    # NOTE: ASYNC AI FUNCTION
+    # ai_output_list = ai_function(webscraper_list)
+    # ai_task = asyncio.create_task(ai_function(webscraper_list)) 
+    # ai_output_list = await ai_task
+    
+    # Literacy and Sentiment Analysis. Returns dictionary {"spelling", "reading", "literacy", "sentiment"} (tested)
 
-    # Source and date scores. Returns a dictionary of lists
+    # NOTE: ASYNC GET LITERACY SCORE
+    # lit_sent_dic = get_lit_sent_score(message)
+    # lit_sent_task = asyncio.create_task(get_lit_sent_score(message))
+    # lit_sent_dic = await lit_sent_task
+
+    async def async_function(loop):
+        tasks = []
+        logger.info("Task list created")
+        tasks.append(asyncio.ensure_future(ai_function(webscraper_list),loop=loop))
+        tasks.append(asyncio.ensure_future(get_lit_sent_score(message),loop=loop))
+        results_lst = await asyncio.gather(*tasks)
+        
+        return results_lst
+
+    loop = asyncio.get_event_loop()
+    ai_lit_sent_results = loop.run_until_complete(async_function(loop))
+
+    #ai_lit_sent_results = asyncio.run(async_function())
+    ai_output_list = ai_lit_sent_results[0]
+    lit_sent_dic = ai_lit_sent_results[1]
+
+    # # Placeholder values for AI scores
+    # # for dic in webscraper_list:
+    # #     dic["relevance_score"] = [0.78, 0.74, 0.72, 0.73, 0.69, 0.66, 0.70, 0.67, 0.65, 0.65]
+    # # ai_output_list = webscraper_list
+    
     google_dic = compute_url_date_score(ai_output_list)
 
-    # Final scores
+    # # Final scores
     final_dic = compile_score(lit_sent_dic, google_dic)
 
-    # Preparing final_dic for dynamo call
+    # # Preparing final_dic for dynamo call
     final_dic["chat_id"] = chat_id
     final_dic["raw_input"] = message
     final_dic["current_date_time"] = current_date_time
     dynamo_call(final_dic)
 
-    # Personalised response
+    # # Personalised response
     response = create_reply(final_dic)
 
     return response
