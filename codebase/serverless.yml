@@ -5,7 +5,7 @@ provider:
   runtime: python3.6
   profile:
   environment:
-    TELEGRAM_TOKEN: ${file(./serverless.env.yml):TELEGRAM_TOKEN, '<YOUR_TELEGRAM_BOT_TOKEN_HERE>'}
+    TELEGRAM_TOKEN: ${file(./serverless.env.yml):TELEGRAM_TOKEN, '<your_token>'}
 
 functions:
   webhook:
