@@ -12,14 +12,13 @@ $ npm install serverless -g
 $ npm install
 
 # Put the bot token received into a file called serverless.yml
-Open serverless.yml, then at TELEGRAM_TOKEN: <your_token>, replace <your_token> with your bot's token  
-(Can use the bot I created, link is above and token is already included in serverless.yml)
+Open serverless.yml, then at TELEGRAM_TOKEN: '<your_token>', replace <your_token> with your bot's token
 
 # Install AWS CLI
 https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
 
 # Obtain AWS CLI session keys and tokens
-Log into AWS Educate account, clivk on AWS Account tab, then click on AWS Educate Starter Account  
+Log into AWS Educate account, click on AWS Account tab, then click on AWS Educate Starter Account  
 On the vocareum webpage, click on Account Details, then show AWS CLI  
 Copy the text shown  
 
